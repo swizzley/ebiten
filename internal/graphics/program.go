@@ -17,9 +17,9 @@ package graphics
 import (
 	"fmt"
 
-	emath "github.com/hajimehoshi/ebiten/internal/math"
-	"github.com/hajimehoshi/ebiten/internal/opengl"
-	"github.com/hajimehoshi/ebiten/internal/web"
+	emath "github.com/hajimehoshi/ebiten/v2/internal/math"
+	"github.com/hajimehoshi/ebiten/v2/internal/opengl"
+	"github.com/hajimehoshi/ebiten/v2/internal/web"
 )
 
 // arrayBufferLayoutPart is a part of an array buffer layout.

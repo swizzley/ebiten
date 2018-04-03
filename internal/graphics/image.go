@@ -15,8 +15,8 @@
 package graphics
 
 import (
-	"github.com/hajimehoshi/ebiten/internal/math"
-	"github.com/hajimehoshi/ebiten/internal/opengl"
+	"github.com/hajimehoshi/ebiten/v2/internal/math"
+	"github.com/hajimehoshi/ebiten/v2/internal/opengl"
 )
 
 var (
