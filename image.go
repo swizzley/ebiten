@@ -41,8 +41,6 @@ type Image struct {
 	addr *Image
 
 	shareableImage *shareable.Image
-
-	filter Filter
 }
 
 func (i *Image) copyCheck() {
@@ -112,7 +110,6 @@ func (i *Image) fill(r, g, b, a uint8) {
 		op.ColorM.Translate(rf, gf, bf, af)
 	}
 	op.CompositeMode = CompositeModeCopy
-	op.Filter = FilterNearest
 	i.DrawImage(emptyImage, op)
 }
 
@@ -187,17 +184,10 @@ func (i *Image) DrawImage(img *Image, options *DrawImageOptions) {
 
 	mode := opengl.CompositeMode(options.CompositeMode)
 
-	filter := graphics.FilterNearest
-	if options.Filter != FilterDefault {
-		filter = graphics.Filter(options.Filter)
-	} else if img.filter != FilterDefault {
-		filter = graphics.Filter(img.filter)
-	}
-
 	a, b, c, d, tx, ty := geom.elements()
 	vs := img.shareableImage.QuadVertices(sx0, sy0, sx1, sy1, a, b, c, d, tx, ty, options.ColorM.impl)
 	is := graphicsutil.QuadIndices()
-	i.shareableImage.DrawImage(img.shareableImage, vs, is, mode, filter)
+	i.shareableImage.DrawImage(img.shareableImage, vs, is, mode, graphics.Filter(options.Filter))
 }
 
 // Bounds returns the bounds of the image.
@@ -291,7 +281,7 @@ type DrawImageOptions struct {
 	CompositeMode CompositeMode
 
 	// Filter is a type of texture filter.
-	// The default (zero) value is FilterDefault, which is same as FilterNearest.
+	// The default (zero) value is FilterNearest.
 	Filter Filter
 }
 
@@ -352,7 +342,6 @@ func NewImageFromImage(source image.Image) *Image {
 func newImageWithScreenFramebuffer(width, height int) *Image {
 	i := &Image{
 		shareableImage: shareable.NewScreenFramebufferImage(width, height),
-		filter:         FilterDefault,
 	}
 	i.addr = i
 	runtime.SetFinalizer(i, (*Image).Dispose)
